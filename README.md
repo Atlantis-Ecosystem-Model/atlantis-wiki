@@ -2,7 +2,7 @@
 
 This repository contains the Atlantis Ecosystem Model documentation, converted from Confluence Wiki to a [Quarto](https://quarto.org/) website.
 
-**Live site:** https://jacobkasper.github.io/atlantis-wiki/
+**Live site:** https://Atlantis-Ecosystem-Model.github.io/atlantis-wiki/
 
 ## About
 
