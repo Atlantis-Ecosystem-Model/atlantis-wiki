@@ -27,12 +27,14 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
         
       - name: Render Quarto Project
-        run: quarto render
+        run: |
+          cd quarto_files
+          quarto render
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '_site'
+          path: 'quarto_files/_site'
 
   deploy:
     environment:
