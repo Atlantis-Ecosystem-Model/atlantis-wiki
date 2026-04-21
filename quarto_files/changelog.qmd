@@ -6,13 +6,379 @@ This page consolidates all updates, changes, bug fixes, and new features for Atl
 
 ## Version History
 
+### 2024
+
+#### Corrected contaminant code
+
+*July 23 - **6718** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+   M /Atlantis/trunk/atlantis/atecology/atdemography.c
+   M /Atlantis/trunk/atlantis/atecology/atq10.c
+Missed proportion of contaminant being transferred in atdemography.c
+No real change in at10.c was a spacing issue
+
+---
+
+#### Fix missing break
+
+*June 24 - **6717** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+   M /Atlantis/trunk/atlantis/atecology/atmigration.c
+   M /Atlantis/trunk/atlantis/atecology/atq10.c
+Fixed a missing break
+
+---
+
+#### Added FrefLim
+
+*May 10 - **6716** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+   M /Atlantis/trunk/example/VMPA_setas_harvest_F_Trunk.prm
+Added FrefLim
+
+---
+
+#### Modified Q10 method
+
+*May 6 - **6715** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+   M /Atlantis/trunk/atlantis/atecology/atq10.c
+   M /Atlantis/trunk/atlantis/atharvest/atHarvestImposedCatch.c
+   M /Atlantis/trunk/atlantis/atlantismain/include/atlantisboxmodel.h
+
+Updated the q10 to include a new CEATTLE option (setting 3 for q10_method)
+
+---
+
+#### Added contaminant handling
+
+*March 30 - **6707** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+   M /Atlantis/trunk/atlantis/ConvertAtlantis/atBioltoXML.c
+   M /Atlantis/trunk/atlantis/ConvertAtlantis/atManagetoXML.c
+Added contaminant handling
+
+---
+
+#### Correct compiler
+
+*March 30 - **6706** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+M /Atlantis/trunk/atlantis/sjwlib/diffusion.c
+M /Atlantis/trunk/atlantis/sjwlib/include/sjwlib.h
+Sorting compile issues
+
+---
+
+#### Changed reference to flagusingRedusR_HCR_id
+
+*February 16 - **6704** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+   M /Atlantis/trunk/atlantis/atmanage/atManageAnnual.c
+Changed reference to flagusingRedusR_HCR_id to overall model variable bm->usingRedus_R_HCR
+
+---
+
+#### Added forced effort
+
+*January 29 - **6702** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+   M /Atlantis/trunk/atlantis/atmanage/atManage.c
+
+Added option for forced effort to pay attention to TAC’s
+
+---
+
+#### Added fail-safe
+
+*January 23 - **6701** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+   M /Atlantis/trunk/atlantis/atlantismain/atlantismain.c
+
+Added an additional bm.dtsz_stored fail safe
+
+--- 
+
+#### Q10 response
+
+*January 8 - **6700** -  - Fulton, Beth (Environment, Hobart)*
+
+Incorporates q10 response developed by Alberto Rovellini https://academic.oup.com/icesjms/advance-article/doi/10.1093/icesjms/fsae002/7584994
+
+Changed paths:
+   M /Atlantis/trunk/atlantis/atecology/atbiology.c
+Added bm->dtsz_stored = dt; fail safe
+---
+
+#### Fixing compiler
+
+*January 4 - **6699** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+   M /Atlantis/trunk/atlantis/PreRules.am
+   M /Atlantis/trunk/atlantis/atecology/atannualbiology.c
+   M /Atlantis/trunk/atlantis/atecology/atmigration.c
+   M /Atlantis/trunk/atlantis/atecology/atvertprocesses.c
+   M /Atlantis/trunk/atlantis/atmanage/atManageAnnual.c
+   M /Atlantis/trunk/example/RunAtlantis.sh
+
+Tidying up compile time issues with new compiler - mainly clarity of indenting, typos in comments and “set but not used” variables. Also triple checked the re-initialisation of the new global memory handling for box variables
+
+---
+
 ### 2023
+
+#### Temperature dependence
+
+*November 28 - **6698** -  - Fulton, Beth (Environment, Hobart)*
+
+***Adds new parameters***
+****biology.prm****
+Flags to activate temperature dependent movement and recruitment
+
+ `flagtempdepend_move 0`
+ `flagtempdepend_reprod 0`
+
+****run.prm****
+Flag is used to maintain old plankton mortality assumptions (from very early code versions that persisted as potential bug into newer models). Turning it on zeroes out phytoplankton mortality and only allows for lysis in phytoplankton.
+Note: Testing this flag using the Puget Sound model found no difference in output between 0 and 1 settings
+
+`flag_replicated_old_PPmort 0`
+
+****harvest.prm****
+Related to companion species. Catch of one species results in bycatch of another
+
+ `K_max_sp_co 0`
+ `max_co_sp_XXX 0`
+ 
+****migrations.csv****
+One additional column is required (17 columns total)
+
+ReprodAllowed is whether individuals participating in this migration can spawn when they reach maturity (1 = yes, 0 = no). If set to 0 then in multi-year spawners (like salmon), the individuals will not spawn even if they reach adult ages during that migration.
+
+Changed paths:
+   M /Atlantis/trunk/atlantis/PreRules.am
+   M /Atlantis/trunk/atlantis/atecology/atbiology.c
+   M /Atlantis/trunk/atlantis/atecology/atbiolsetup.c
+   M /Atlantis/trunk/atlantis/atecology/atdemography.c
+   M /Atlantis/trunk/atlantis/atecology/atmovement.c
+   M /Atlantis/trunk/atlantis/atlantismain/atlantismain.c
+   M /Atlantis/trunk/atlantis/atlantismain/include/atlantisboxmodel.h
+   M /Atlantis/trunk/atlantis/atmanage/atManage.c
+   M /Atlantis/trunk/atlantis/atmanage/atRlinkRAssess.c
+   M /Atlantis/trunk/atlantis/atphysics/attracerIO.c
+   M /Atlantis/trunk/example/VMPA_setas_run_fishing_F_Trunk.prm
+
+Fixed some compile issues for Sonoma M2 Macs, added more to the tiered management code and corrected invertebrate movement memory bug
+
+---
+
+#### Explicit nutrient ratios
+
+*November 6 - **6697** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+ `  M /Atlantis/trunk/atlantis/ConvertAtlantis/atRunXML.c
+   M /Atlantis/trunk/atlantis/atassess/atAssessTierSetup.c
+   M /Atlantis/trunk/atlantis/atecology/additionalTracer.c
+   M /Atlantis/trunk/atlantis/atecology/atContaminants.c
+   M /Atlantis/trunk/atlantis/atecology/atbiology.c
+   M /Atlantis/trunk/atlantis/atecology/atecology.c
+   M /Atlantis/trunk/atlantis/atlantismain/include/atlantisboxmodel.h
+   M /Atlantis/trunk/atlantis/atphysics/atparamIO.c `
+
+Added explicit N_to_C and N_to_P ratios and modified some memory initialisation
+
+---
+
+#### Fix contaminant aging transfer
+
+*October 17 - **6693** -  - Fulton, Beth (Environment, Hobart)*
+
+Changed paths:
+`   M /Atlantis/trunk/atlantis/atecology/atContaminants.c
+   M /Atlantis/trunk/atlantis/atlantisUtil/atUtilGroupIO.c
+   M /Atlantis/trunk/atlantis/atlantisUtil/include/atFunctGroup.h `
+
+Fix to atContaminants aging transfer as final boxes may be overwriting earlier boxes in the old way it was done.
+
+---
+
+#### Fix typo
+
+*October 10 - **6691** -  - Fulton, Beth (Environment, Hobart)*
+
+Fixed misplaced "#"
+
+Changed paths:
+ `  M /Atlantis/trunk/atlantis/PreRules.am `
+
+---
+
+#### [MSE tiered management]
+
+*October 5 - **6690** -  - Fulton, Beth (Environment, Hobart)*
+
+Fixing a bunch of memory issues and adding more to MSE tiered management code
+
+Changed paths:
+`  M /Atlantis/trunk/atlantis/PreRules.am
+   M /Atlantis/trunk/atlantis/atSS3Link/atSS3DataGen.c
+   M /Atlantis/trunk/atlantis/atassess/atAssessTierSetup.c
+   M /Atlantis/trunk/atlantis/atecology/additionalTracer.c
+   M /Atlantis/trunk/atlantis/atecology/atLandProcess.c
+   M /Atlantis/trunk/atlantis/atecology/atannualbiology.c
+   M /Atlantis/trunk/atlantis/atecology/atbiology.c
+   M /Atlantis/trunk/atlantis/atecology/atbiolsetup.c
+   M /Atlantis/trunk/atlantis/atecology/atdemography.c
+   M /Atlantis/trunk/atlantis/atecology/atdiversity.c
+   M /Atlantis/trunk/atlantis/atecology/atecology.c
+   M /Atlantis/trunk/atlantis/atecology/include/atbiology.h
+   M /Atlantis/trunk/atlantis/atecology/include/atbiologyPrivate.h
+   M /Atlantis/trunk/atlantis/atecology/include/atecology.h
+   M /Atlantis/trunk/atlantis/ateconomic/atEconomicAnnual.c
+   M /Atlantis/trunk/atlantis/ateconomic/ateconomicsetup.c
+   M /Atlantis/trunk/atlantis/atlantisUtil/atUtilGroupIO.c
+   M /Atlantis/trunk/atlantis/atlantismain/atlantismain.c
+   M /Atlantis/trunk/atlantis/atmanage/atCloseKin.c
+   M /Atlantis/trunk/atlantis/atmanage/atManageAnnual.c
+   M /Atlantis/trunk/atlantis/atmanage/atManageTier.c
+   M /Atlantis/trunk/atlantis/atmanage/include/atManage.h
+   M /Atlantis/trunk/atlantis/atphysics/atphysics.c
+   M /Atlantis/trunk/atlantis/atphysics/atsourcesink.c`
+
+---
+
+#### [New harvest strategy options]
+
+*October 3 - **6688** -  - Fulton, Beth (Environment, Hobart)*
+
+Most of the additions are due to new harvest strategy options. Have also changed the handling of some migration and movement-related arrays. Should not change output in anyway but is a cleaner handling of memory.
+
+Changed paths:
+`   M /Atlantis/trunk/atlantis/ConvertAtlantis/atAssesstoXML.c
+   M /Atlantis/trunk/atlantis/ConvertAtlantis/atCreateXML.c
+   M /Atlantis/trunk/atlantis/atSS3Link/atSS3DataGen.c
+   M /Atlantis/trunk/atlantis/atSS3Link/atSS3LinkIO.c
+   M /Atlantis/trunk/atlantis/atassess/atAssessTierSetup.c
+   M /Atlantis/trunk/atlantis/atassess/atassessParamIO.c
+   M /Atlantis/trunk/atlantis/atassess/atdatareading.c
+   M /Atlantis/trunk/atlantis/atassess/atnetwork.c
+   M /Atlantis/trunk/atlantis/atassess/atsurvey.c
+   M /Atlantis/trunk/atlantis/atassess/atwriting.c
+   M /Atlantis/trunk/atlantis/atecology/additionalTracer.c
+   M /Atlantis/trunk/atlantis/atecology/atbiolmessage.c
+   M /Atlantis/trunk/atlantis/atecology/atbiology.c
+   M /Atlantis/trunk/atlantis/atecology/atbiolsetup.c
+   M /Atlantis/trunk/atlantis/atecology/atbiophysics.c
+   M /Atlantis/trunk/atlantis/atecology/atdiversity.c
+   M /Atlantis/trunk/atlantis/atecology/atecology.c
+   M /Atlantis/trunk/atlantis/atecology/atecologyts.c
+   M /Atlantis/trunk/atlantis/atecology/atmovement.c
+   M /Atlantis/trunk/atlantis/atecology/include/atbiology.h
+   M /Atlantis/trunk/atlantis/atecology/include/atbiologyPrivate.h
+   M /Atlantis/trunk/atlantis/atecology/include/atecology.h
+   M /Atlantis/trunk/atlantis/ateconomic/ateconeffort.c
+   M /Atlantis/trunk/atlantis/ateconomic/ateconio.c
+   M /Atlantis/trunk/atlantis/ateconomic/ateconomicsetup.c
+   M /Atlantis/trunk/atlantis/atharvest/atHarvest.c
+   M /Atlantis/trunk/atlantis/atharvest/atHarvestIO.c
+   M /Atlantis/trunk/atlantis/atharvest/atHarvestTS.c
+   M /Atlantis/trunk/atlantis/atlantisUtil/atUtil.c
+   M /Atlantis/trunk/atlantis/atlantisUtil/atUtilGroupIO.c
+   M /Atlantis/trunk/atlantis/atlantisUtil/atUtilXML.c
+   M /Atlantis/trunk/atlantis/atlantisUtil/include/atFisheryStruct.h
+   M /Atlantis/trunk/atlantis/atlantismain/atlantismain.c
+   M /Atlantis/trunk/atlantis/atlantismain/include/atlantisboxmodel.h
+   M /Atlantis/trunk/atlantis/atmanage/Makefile.am
+   M /Atlantis/trunk/atlantis/atmanage/atManageAnnual.c
+   M /Atlantis/trunk/atlantis/atmanage/atManageIO.c
+   M /Atlantis/trunk/atlantis/atmanage/atManageSetup.c
+   M /Atlantis/trunk/atlantis/atmanage/atManageTier.c
+   M /Atlantis/trunk/atlantis/atmanage/atRlinkRBC.c
+   M /Atlantis/trunk/atlantis/atmanage/atSS3assess.c
+   M /Atlantis/trunk/atlantis/atmanage/include/atManage.h
+   M /Atlantis/trunk/atlantis/atphysics/atagetracerIO.c
+   M /Atlantis/trunk/atlantis/atphysics/atdiagIO.c
+   M /Atlantis/trunk/atlantis/atphysics/atepiIO.c
+   M /Atlantis/trunk/atlantis/atphysics/atfishstatIO.c
+   M /Atlantis/trunk/atlantis/atphysics/atphysIO.c
+   M /Atlantis/trunk/atlantis/atphysics/attracerIO.c
+   M /Atlantis/trunk/atlantis/atphysics/attransport.c`
+
+---
+
+*September 27 - **6685** -  - Fulton, Beth (Environment, Hobart)*
+
+#### Adding PGMSY and aging of contaminants
+
+Changed paths:
+`  M /Atlantis/trunk/atlantis/ConvertAtlantis/atAssesstoXML.c
+   M /Atlantis/trunk/atlantis/ConvertAtlantis/atCreateXML.c
+   M /Atlantis/trunk/atlantis/ConvertAtlantis/atRunXML.c
+   M /Atlantis/trunk/atlantis/atSS3Link/atSS3DataGen.c
+   M /Atlantis/trunk/atlantis/atSS3Link/atSS3LinkIO.c
+   M /Atlantis/trunk/atlantis/atassess/atAssessTierSetup.c
+   M /Atlantis/trunk/atlantis/atassess/atassessParamIO.c
+   M /Atlantis/trunk/atlantis/atecology/additionalTracer.c
+   M /Atlantis/trunk/atlantis/atecology/atContaminants.c
+   M /Atlantis/trunk/atlantis/atecology/atGroupProcesses.c
+   M /Atlantis/trunk/atlantis/atecology/atannualbiology.c
+   M /Atlantis/trunk/atlantis/atecology/atbiolmessage.c
+   M /Atlantis/trunk/atlantis/atecology/atbiolsetup.c
+   M /Atlantis/trunk/atlantis/atecology/atdemography.c
+   M /Atlantis/trunk/atlantis/atecology/atecology.c
+   M /Atlantis/trunk/atlantis/atecology/atmigration.c
+   M /Atlantis/trunk/atlantis/atecology/atmovement.c
+   M /Atlantis/trunk/atlantis/atecology/include/atContaminants.h
+   M /Atlantis/trunk/atlantis/atharvest/atHarvest.c
+   M /Atlantis/trunk/atlantis/atharvest/atHarvestParamIO.c
+   M /Atlantis/trunk/atlantis/atharvest/atHarvestSetup.c
+   M /Atlantis/trunk/atlantis/atharvest/include/atHarvest.h
+   M /Atlantis/trunk/atlantis/atharvest/include/atHarvestPrivate.h
+   M /Atlantis/trunk/atlantis/atlantisUtil/atUtil.c
+   M /Atlantis/trunk/atlantis/atlantisUtil/atUtilGroupIO.c
+   M /Atlantis/trunk/atlantis/atlantisUtil/atUtilXML.c
+   M /Atlantis/trunk/atlantis/atlantisUtil/include/atFunctGroup.h
+   M /Atlantis/trunk/atlantis/atlantismain/include/atlantisboxmodel.h
+   M /Atlantis/trunk/atlantis/atmanage/atManageAnnual.c
+   M /Atlantis/trunk/atlantis/atmanage/atManageTier.c
+   M /Atlantis/trunk/atlantis/atmanage/atSS3assess.c `
+
+---
+
+*November 9 - **"6683"** - Fulton, Beth (Environment, Hobart)*
+
+#### Updated flag_replicated_old_PPmort
+
+Changed paths:
+   M /Atlantis/trunk/example/VMPA_setas_run_fishing_F_Trunk.prm
+Updated to include the new parameter flag_replicated_old_PPmort
+flag_replicated_old_PPmort 0 #Flag to replicate old model code assumptions around primary production mortality 
+
+---
 
 #### [Companion Species and linked TACs](posts/companion-species-and-linked-tacs.qmd)
 
 *Oct 14 - **v6682** - Fulton, Beth (Environment, Hobart)*
 
 We have expanded how companion species (in the catch) and companion TACs are treated - expanded beyond just 2 species.This is set up by following these steps (also described in the manual volume 2):Set isTAC to 1 in thecsvfile for both target and companion speciesSet a fishery specific flag YY...
+
+---
+
+#### [Indicate which method to deal with temperature scalars]. 
+*June 16 - **v6681** - - Fulton, Beth (Environment, Hobart)*
+Setting to zero uses a simple Q10 based correction using 15'C reference. `q10_method_XXX 0`Changed paths: M /Atlantis/trunk/atlantis/ConvertAtlantis/atBioltoXML.c
+Fixed the read in of q10_method param
 
 ---
 
